@@ -26,4 +26,7 @@ for col in df.columns :
     print(col, df[col].isnull().sum() / df[col].shape[0])
 
 
+# TODO: plot all classes, NA distribution, pca ?
+
+
 
