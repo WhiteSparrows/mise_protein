@@ -11,10 +11,11 @@ from xgboost import XGBClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import tree
+from sklearn.model_selection import GridSearchCV
 
 
 def score_classifier(dataset,classifier,labels):
@@ -75,13 +76,17 @@ print(classification_report(y_test,y_pred))
 svc_eval = score_classifier(X, svc, labels)
 
 
-xgb = XGBClassifier()
+xgb = XGBClassifier(colsample_bytree=0.3,
+                    learning_rate=0.03,
+                    max_depth=3,
+                   n_estimators=700)
+#Best parameters: {'colsample_bytree': 0.3, 'learning_rate': 0.03, 'max_depth': 3, 'n_estimators': 700}
 lr = LogisticRegression() # TODO: try different solver
 rf = RandomForestClassifier()
 naive_bayes = GaussianNB()
 knn = KNeighborsClassifier(n_neighbors=3)
 dt = tree.DecisionTreeClassifier(random_state=0)
-
+Ada = AdaBoostClassifier()
 
 
 dict_models = {'SVC': svc,
@@ -89,6 +94,7 @@ dict_models = {'SVC': svc,
                'Decision Tree':dt,
                'Random Forest': rf,
               'XGBoost': xgb,
+               'AdaBoost':Ada,
                'Naive Bayes': naive_bayes,
                'KNN':knn}
 
@@ -105,5 +111,7 @@ for name, model in dict_models.items():
     acc_scores.append(evalu['acc'])
 
 
-plt.plot(names, acc_scores)
+plt.plot(names, acc_scores, color='green')
+plt.xlabel('Models')
+plt.ylabel('Accuracy score')
 plt.show()
