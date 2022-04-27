@@ -12,6 +12,9 @@ from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import tree
 
 
 def score_classifier(dataset,classifier,labels):
@@ -74,19 +77,33 @@ svc_eval = score_classifier(X, svc, labels)
 
 xgb = XGBClassifier()
 lr = LogisticRegression() # TODO: try different solver
-rf = RandomForestClassifier(n_estimators=100, criterion='entropy', random_state = 0)
+rf = RandomForestClassifier()
+naive_bayes = GaussianNB()
+knn = KNeighborsClassifier(n_neighbors=3)
+dt = tree.DecisionTreeClassifier(random_state=0)
 
 
 
 dict_models = {'SVC': svc,
-              'XGBoost': xgb,
                'Logistic Regression': lr,
-               'Random Forest': rf}
+               'Decision Tree':dt,
+               'Random Forest': rf,
+              'XGBoost': xgb,
+               'Naive Bayes': naive_bayes,
+               'KNN':knn}
+
+acc_scores = []
+names = []
 for name, model in dict_models.items():
     print('---------------------------------')
+    names.append(name)
     print(name)
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     print(classification_report(y_test,y_pred))
-    score_classifier(X, model, labels)
+    evalu = score_classifier(X, model, labels)
+    acc_scores.append(evalu['acc'])
 
+
+plt.plot(names, acc_scores)
+plt.show()
