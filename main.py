@@ -58,9 +58,8 @@ label_encoder = LabelEncoder()
 for col in ['Genotype', 'Treatment', 'Behavior', 'class']:
     df[col] = label_encoder.fit_transform(df[col])
 df = df.fillna(df.mean())
-df_vals = df.drop(['class','MouseID'],axis=1).values
-#df = df.dropna(axis=0)
-X = StandardScaler().fit_transform(df_vals)
+X = df.drop(['class', 'MouseID'],axis=1).values
+#X = StandardScaler().fit_transform(X)
 
 y = df['class'].astype(int)
 
