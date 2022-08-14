@@ -112,5 +112,5 @@ for name, model in dict_models.items():
 
 plt.plot(names, acc_scores, color='green')
 plt.xlabel('Models')
-plt.ylabel('Accuracy score')
+plt.ylabel('Accuracy scores')
 plt.show()
